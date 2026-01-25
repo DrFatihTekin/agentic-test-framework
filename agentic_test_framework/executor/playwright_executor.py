@@ -17,19 +17,25 @@ class PlaywrightExecutor:
         browser_type: str = "chromium",
         headless: bool = False,
         screenshot_dir: str = "./test-results/screenshots",
-        screenshot_all_steps: bool = True
+        screenshot_all_steps: bool = True,
+        enable_trace: bool = True,
+        trace_dir: str = "./test-results/traces"
     ):
         self.browser_type = browser_type
         self.headless = headless
         self.screenshot_dir = Path(screenshot_dir)
         self.screenshot_dir.mkdir(parents=True, exist_ok=True)
         self.screenshot_all_steps = screenshot_all_steps
+        self.enable_trace = enable_trace
+        self.trace_dir = Path(trace_dir)
+        self.trace_dir.mkdir(parents=True, exist_ok=True)
         
         self.playwright = None
         self.browser: Optional[Browser] = None
         self.context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
         self.screenshot_counter = 0
+        self.trace_path: Optional[str] = None
     
     def __enter__(self):
         """Context manager entry"""
@@ -53,7 +59,21 @@ class PlaywrightExecutor:
         else:
             raise ValueError(f"Unknown browser type: {self.browser_type}")
         
-        self.context = self.browser.new_context(viewport={"width": 1920, "height": 1080})
+        # Create context with recording capabilities
+        context_options = {
+            "viewport": {"width": 1920, "height": 1080},
+            "record_video_dir": str(self.screenshot_dir.parent / "videos") if self.enable_trace else None,
+            "record_video_size": {"width": 1920, "height": 1080} if self.enable_trace else None
+        }
+        self.context = self.browser.new_context(**context_options)
+        
+        # Start tracing if enabled
+        if self.enable_trace:
+            from datetime import datetime
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            self.trace_path = str(self.trace_dir / f"trace_{timestamp}.zip")
+            self.context.tracing.start(screenshots=True, snapshots=True, sources=True)
+        
         self.page = self.context.new_page()
     
     def stop(self):
@@ -61,6 +81,12 @@ class PlaywrightExecutor:
         if self.page:
             self.page.close()
         if self.context:
+            # Stop and save trace before closing context
+            if self.enable_trace and self.trace_path:
+                try:
+                    self.context.tracing.stop(path=self.trace_path)
+                except Exception as e:
+                    print(f"Warning: Could not save trace: {e}")
             self.context.close()
         if self.browser:
             self.browser.close()

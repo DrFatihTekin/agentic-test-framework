@@ -18,14 +18,22 @@ class HTMLReporter:
         test_description: str,
         results: List[ActionResult],
         start_time: datetime,
-        end_time: datetime
+        end_time: datetime,
+        output_dir: str = None
     ) -> str:
         """
         Generate HTML report with test results.
         
+        Args:
+            output_dir: Optional directory to save report (overrides instance output_dir)
+        
         Returns:
             Path to the generated HTML report
         """
+        # Use provided output_dir or fall back to instance output_dir
+        report_dir = Path(output_dir) if output_dir else self.output_dir
+        report_dir.mkdir(parents=True, exist_ok=True)
+        
         duration = (end_time - start_time).total_seconds()
         passed = sum(1 for r in results if r.success)
         failed = len(results) - passed
@@ -40,9 +48,8 @@ class HTMLReporter:
             failed=failed
         )
         
-        # Save report
-        timestamp = start_time.strftime("%Y%m%d_%H%M%S")
-        report_path = self.output_dir / f"report_{timestamp}.html"
+        # Save report with simpler name since it's in a timestamped directory
+        report_path = report_dir / "report.html"
         report_path.write_text(html, encoding='utf-8')
         
         return str(report_path)

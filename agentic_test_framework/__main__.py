@@ -95,6 +95,11 @@ Examples:
         help="Disable automatic screenshots for each step"
     )
     parser.add_argument(
+        "--no-trace",
+        action="store_true",
+        help="Disable Playwright trace recording"
+    )
+    parser.add_argument(
         "--scenario",
         help="Run specific scenario from ATF file (by name)"
     )
@@ -224,7 +229,8 @@ Examples:
                     browser_type=browser,
                     headless=headless,
                     generate_report=not args.no_report,
-                    screenshot_all_steps=not args.no_step_screenshots
+                    screenshot_all_steps=not args.no_step_screenshots,
+                    enable_playwright_trace=not args.no_trace
                 )
                 
                 results = runner.run(scenario.steps)
@@ -244,7 +250,8 @@ Examples:
                 browser_type=args.browser,
                 headless=args.headless,
                 generate_report=not args.no_report,
-                screenshot_all_steps=not args.no_step_screenshots
+                screenshot_all_steps=not args.no_step_screenshots,
+                enable_playwright_trace=not args.no_trace
             )
             
             results = runner.run(test_input)

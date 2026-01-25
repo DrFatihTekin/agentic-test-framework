@@ -31,10 +31,13 @@ agentic-test examples/login.atf
 - 🤖 **Natural Language Tests**: Write tests in plain English
 - 🌐 **Browser Automation**: Powered by Playwright (Chrome, Firefox, Safari)
 - 🧠 **AI-Driven**: Uses OpenAI to interpret test scenarios
-- 📸 **Auto Screenshots**: Captures screenshots on demand or failure
-- � **HTML Reports**: Beautiful test reports with embedded screenshots (like RobotFramework)
+- 📸 **Auto Screenshots**: Captures screenshots on demand or for every step
+- 📊 **Dual Reporting**: Custom HTML reports + Playwright trace viewer
+- 🎬 **Time-Travel Debugging**: Playwright traces with DOM snapshots, network logs, console output
+- 🎥 **Video Recording**: Automatic video capture of test execution
 - ✅ **Assertions**: Verify conditions and extract data
-- �🔄 **Smart Retries**: Handles flaky elements automatically
+- 🔄 **Smart Retries**: Handles flaky elements automatically
+- 📝 **ATF Format**: Structured test files with YAML-like syntax
 
 ## Example Tests
 
