@@ -1,0 +1,6 @@
+Go to example.com
+Verify the page title contains "Example"
+Verify the URL contains "example.com"
+Verify the page contains "Example Domain"
+Verify the page contains "This text does not exist"
+Take a screenshot

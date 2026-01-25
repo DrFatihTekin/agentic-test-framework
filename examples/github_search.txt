@@ -1,0 +1,1 @@
+Navigate to github.com, click on the search button, type "python playwright" in the search field, wait 2 seconds, and take a screenshot

@@ -1,0 +1,28 @@
+# Navigation Test Suite
+
+Description: Verify navigation and page transitions
+
+## Scenario: Home Page
+@tag smoke
+
+Go to example.com
+Verify page title contains 'Example'
+Verify page contains 'Example Domain'
+Take a screenshot named 'homepage'
+
+## Scenario: External Links
+@tag navigation
+
+Go to example.com
+Click 'More information' link
+Verify URL contains 'iana.org'
+Take a screenshot
+
+## Scenario: Back Navigation
+@tag navigation
+
+Go to example.com
+Click 'More information' link
+Wait 2 seconds
+Navigate back
+Verify page contains 'Example Domain'

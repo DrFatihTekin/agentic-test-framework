@@ -1,0 +1,33 @@
+# Search Functionality Test
+
+Description: Tests for search feature across the application
+
+@config browser=chromium
+@config headless=true
+
+## Scenario: Basic Search
+@tag smoke
+@tag search
+
+Go to example.com
+Type 'test query' into search box
+Click search button
+Verify page contains 'results'
+Take a screenshot
+
+## Scenario: Empty Search
+@tag search
+@tag edge-case
+
+Go to example.com
+Click search button
+Verify page contains 'Please enter search term'
+
+## Scenario: Special Characters Search
+@tag search
+@tag edge-case
+
+Go to example.com
+Type '!@#$%^&*()' into search box
+Click search button
+Verify page contains 'results' or 'no results found'

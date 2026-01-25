@@ -1,0 +1,36 @@
+# Login Test Suite
+
+Description: Test suite for user authentication flows
+
+@config browser=chromium
+@config headless=false
+
+## Scenario: Successful Login
+@tag smoke
+@tag login
+
+Go to example.com/login
+Type 'testuser' into username field
+Type 'password123' into password field
+Click login button
+Verify page contains 'Welcome'
+Take a screenshot named 'successful_login'
+
+## Scenario: Invalid Credentials
+@tag login
+@tag negative
+
+Go to example.com/login
+Type 'wronguser' into username field
+Type 'wrongpass' into password field
+Click login button
+Verify page contains 'Invalid credentials'
+Take a screenshot
+
+## Scenario: Empty Form Submission
+@tag login
+@tag validation
+
+Go to example.com/login
+Click login button
+Verify page contains 'required'

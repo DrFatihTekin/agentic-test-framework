@@ -1,0 +1,5 @@
+Go to example.com
+Wait 1 second
+Extract the page title and display it
+Verify the page contains the text "Example Domain"
+Take a screenshot
