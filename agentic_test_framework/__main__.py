@@ -130,26 +130,9 @@ Examples:
             print(EnvSetup.get_setup_instructions())
         sys.exit(0)
     
-    # Handle --
-    parser.add_argument(
-        "--tag",
-        help="Run scenarios with specific tag from ATF file"
-    )
-    
-    args = parser.parse_args()
-    
-    # Handle --create flag or --setup
-    if not args.test:
-        parser.error("the following arguments are required: test (unless using --create or --setup)")
-    
-    # Check if OpenAI API key is configured before running tests
-    if not os.getenv('OPENAI_API_KEY'):
-        print("❌ OPENAI_API_KEY is not configured")
-        print("\n🔧 Run setup to create .env file:")
-        print("   agentic-test --setup")
-        print("\nOr set the environment variable:")
-        print("   export OPENAI_API_KEY='your-api-key'")
-        sys.exit(1
+    # Handle --create flag
+    if args.create:
+        try:
             created = ATFTemplateGenerator.create_file(
                 output_path=args.create,
                 template_type=args.template,
@@ -172,9 +155,18 @@ Examples:
         
         sys.exit(0)
     
-    # Require test argument if not using --create
+    # Require test argument if not using --create or --setup
     if not args.test:
-        parser.error("the following arguments are required: test (unless using --create)")
+        parser.error("the following arguments are required: test (unless using --create or --setup)")
+    
+    # Check if OpenAI API key is configured before running tests
+    if not os.getenv('OPENAI_API_KEY'):
+        print("❌ OPENAI_API_KEY is not configured")
+        print("\n🔧 Run setup to create .env file:")
+        print("   agentic-test --setup")
+        print("\nOr set the environment variable:")
+        print("   export OPENAI_API_KEY='your-api-key'")
+        sys.exit(1)
     
     try:
         # Check if input is an ATF file
