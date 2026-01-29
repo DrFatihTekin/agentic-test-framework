@@ -8,6 +8,12 @@ Description: Test suite for user authentication flows
 ## Scenario: Successful Login
 @tag smoke
 @tag login
+@id TC-LOGIN-001
+@objective Validate successful login with valid credentials
+@preconditions User account exists and is active
+@expected User is logged in and sees the welcome message
+@postconditions User remains logged in
+@reference REQ-LOGIN-001
 
 Go to example.com/login
 Type 'testuser' into username field
@@ -19,6 +25,12 @@ Take a screenshot named 'successful_login'
 ## Scenario: Invalid Credentials
 @tag login
 @tag negative
+@id TC-LOGIN-002
+@objective Validate login failure with invalid credentials
+@preconditions User account exists
+@expected Error message indicates invalid credentials
+@postconditions User is not logged in
+@reference REQ-LOGIN-002
 
 Go to example.com/login
 Type 'wronguser' into username field
@@ -30,6 +42,12 @@ Take a screenshot
 ## Scenario: Empty Form Submission
 @tag login
 @tag validation
+@id TC-LOGIN-003
+@objective Validate required field messages on empty form
+@preconditions Login page is accessible
+@expected Required field messages are shown
+@postconditions User remains on login page
+@reference REQ-LOGIN-003
 
 Go to example.com/login
 Click login button

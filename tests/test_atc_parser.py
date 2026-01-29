@@ -1,21 +1,21 @@
-"""Tests for ATF file parser"""
+"""Tests for ATC file parser"""
 
 import pytest
 from pathlib import Path
-from agentic_test_framework.parser import ATFParser, ATFScenario, ATFTestSuite
+from agentic_test_framework.parser import ATCParser, ATCScenario, ATCTestSuite
 
 
-class TestATFParser:
-    """Test ATF file format parser"""
+class TestATCParser:
+    """Test ATC file format parser"""
     
     @pytest.fixture
     def parser(self):
-        """Create ATF parser instance"""
-        return ATFParser()
+        """Create ATC parser instance"""
+        return ATCParser()
     
     @pytest.fixture
-    def simple_atf_content(self):
-        """Simple ATF file content"""
+    def simple_atc_content(self):
+        """Simple ATC file content"""
         return """# Simple Test Suite
 
 Description: A simple test suite
@@ -25,20 +25,24 @@ Description: A simple test suite
 
 ## Scenario: First Test
 @tag smoke
+@id TC-001
+@reference REQ-001
 
 Go to example.com
 Take a screenshot
 
 ## Scenario: Second Test
 @tag regression
+@id TC-002
+@reference REQ-002
 
 Navigate to google.com
 Search for playwright
 """
     
-    def test_parse_simple_content(self, parser, simple_atf_content):
-        """Test parsing simple ATF content"""
-        suite = parser.parse_content(simple_atf_content)
+    def test_parse_simple_content(self, parser, simple_atc_content):
+        """Test parsing simple ATC content"""
+        suite = parser.parse_content(simple_atc_content)
         
         assert suite.name == "Simple Test Suite"
         assert suite.description == "A simple test suite"
@@ -46,16 +50,20 @@ Search for playwright
         assert suite.config["headless"] is True
         assert len(suite.scenarios) == 2
     
-    def test_parse_scenarios(self, parser, simple_atf_content):
+    def test_parse_scenarios(self, parser, simple_atc_content):
         """Test parsing scenarios"""
-        suite = parser.parse_content(simple_atf_content)
+        suite = parser.parse_content(simple_atc_content)
         
         assert suite.scenarios[0].name == "First Test"
         assert "smoke" in suite.scenarios[0].tags
         assert "Go to example.com" in suite.scenarios[0].steps
+        assert suite.scenarios[0].id == "TC-001"
+        assert suite.scenarios[0].reference == "REQ-001"
         
         assert suite.scenarios[1].name == "Second Test"
         assert "regression" in suite.scenarios[1].tags
+        assert suite.scenarios[1].id == "TC-002"
+        assert suite.scenarios[1].reference == "REQ-002"
     
     def test_parse_config(self, parser):
         """Test parsing configuration"""
@@ -138,7 +146,7 @@ Do something
     
     def test_validate_empty_suite(self, parser):
         """Test validation of empty suite"""
-        suite = ATFTestSuite(name="Empty", scenarios=[])
+        suite = ATCTestSuite(name="Empty", scenarios=[])
         issues = parser.validate(suite)
         
         assert len(issues) > 0
@@ -146,8 +154,12 @@ Do something
     
     def test_validate_scenario_without_steps(self, parser):
         """Test validation of scenario without steps"""
-        scenario = ATFScenario(name="Empty", steps="")
-        suite = ATFTestSuite(name="Test", scenarios=[scenario])
+        scenario = ATCScenario(
+            name="Empty",
+            steps="",
+            attributes={"id": "TC-EMPTY", "reference": "REQ-EMPTY"}
+        )
+        suite = ATCTestSuite(name="Test", scenarios=[scenario])
         
         issues = parser.validate(suite)
         
@@ -156,8 +168,12 @@ Do something
     
     def test_validate_valid_suite(self, parser):
         """Test validation of valid suite"""
-        scenario = ATFScenario(name="Valid", steps="Go to example.com\nTake screenshot")
-        suite = ATFTestSuite(name="Test", scenarios=[scenario])
+        scenario = ATCScenario(
+            name="Valid",
+            steps="Go to example.com\nTake screenshot",
+            attributes={"id": "TC-VALID", "reference": "REQ-VALID"}
+        )
+        suite = ATCTestSuite(name="Test", scenarios=[scenario])
         
         issues = parser.validate(suite)
         
@@ -203,7 +219,7 @@ Step 2
     def test_parse_file_not_found(self, parser):
         """Test parsing non-existent file"""
         with pytest.raises(FileNotFoundError):
-            parser.parse_file("nonexistent.atf")
+            parser.parse_file("nonexistent.atc")
     
     def test_parse_no_suite_name(self, parser):
         """Test parsing without suite name"""

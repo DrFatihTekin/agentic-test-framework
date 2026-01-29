@@ -1,7 +1,7 @@
 """Parser module for converting natural language to actions"""
 
 from .openai_parser import OpenAIParser
-from .atf_parser import ATFParser, ATFScenario, ATFTestSuite
-from .atf_template import ATFTemplateGenerator
+from .atc_parser import ATCParser, ATCScenario, ATCTestSuite
+from .atc_template import ATCTemplateGenerator
 
 __all__ = ["OpenAIParser"]

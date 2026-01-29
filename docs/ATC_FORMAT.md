@@ -1,12 +1,12 @@
-# ATF File Format
+# ATC File Format
 
 ## Overview
 
-ATF (Agentic Test Format) is a simple, readable file format for defining test scenarios. It allows you to organize multiple test cases in a structured way with configuration and metadata.
+ATC (Agentic Test Case) is a simple, readable file format for defining test scenarios. It allows you to organize multiple test cases in a structured way with configuration and metadata.
 
 ## File Extension
 
-`.atf`
+`.atc`
 
 ## Basic Structure
 
@@ -21,6 +21,12 @@ Description: Optional description of the test suite
 ## Scenario: Test name
 @tag smoke
 @tag login
+@id TC-001
+@objective Verify login works for valid users
+@preconditions User exists and has valid credentials
+@expected User is logged in and sees the dashboard
+@postconditions User remains logged in
+@reference REQ-LOGIN-001
 
 Test steps in natural language...
 Go to example.com
@@ -94,6 +100,25 @@ or
 - Can have multiple tags per scenario
 - Run specific tags with `--tag` CLI flag
 
+### Core Test Case Attributes
+
+Define core attributes directly under each scenario header using `@` attributes:
+
+```
+@id TC-001
+@objective Verify login works for valid users
+@preconditions User exists and has valid credentials
+@expected User is logged in and sees the dashboard
+@postconditions User remains logged in
+```
+
+- **@id**: Unique test case identifier (**required**)
+- **@objective**: Purpose of the test
+- **@preconditions**: Required state before execution
+- **@expected**: Expected result after execution
+- **@postconditions**: State after execution
+- **@reference**: Requirement/user story reference for traceability (**required**)
+
 ### Test Steps
 
 Natural language instructions after the scenario header:
@@ -108,7 +133,7 @@ Take a screenshot
 
 ## Complete Example
 
-```atf
+```atc
 # E-Commerce Checkout Flow
 
 Description: Test the complete checkout process from cart to payment
@@ -120,6 +145,12 @@ Description: Test the complete checkout process from cart to payment
 @tag smoke
 @tag checkout
 @tag guest
+@id TC-CHK-001
+@objective Validate guest checkout flow completes
+@preconditions Cart has at least one item
+@expected Payment page is shown
+@postconditions Cart remains intact if checkout not completed
+@reference REQ-CHK-001
 
 Go to shop.example.com
 Click 'Add to Cart' button
@@ -134,6 +165,12 @@ Take a screenshot named 'payment_page'
 ## Scenario: Registered User Checkout
 @tag checkout
 @tag registered
+@id TC-CHK-002
+@objective Validate registered checkout uses saved address
+@preconditions User account exists and is active
+@expected Address is pre-filled on checkout
+@postconditions User stays signed in
+@reference REQ-CHK-002
 
 Go to shop.example.com/login
 Type 'user@example.com' into email field
@@ -149,27 +186,33 @@ Take a screenshot
 ## Scenario: Empty Cart
 @tag checkout
 @tag edge-case
+@id TC-CHK-003
+@objective Validate empty cart messaging
+@preconditions Cart is empty
+@expected Message indicates cart is empty
+@postconditions Cart remains empty
+@reference REQ-CHK-003
 
 Go to shop.example.com
 Click cart icon
 Verify page contains 'Your cart is empty'
 ```
 
-## Creating ATF Files
+## Creating ATC Files
 
 ### Quick Start with Templates
 
 ```bash
 # Create a basic template
-agentic-test --create tests/my_test.atf
+agentic-test --create tests/my_test.atc
 
 # Create from specific template
-agentic-test --create tests/login.atf --template login
-agentic-test --create tests/shop.atf --template ecommerce
-agentic-test --create tests/api.atf --template api
+agentic-test --create tests/login.atc --template login
+agentic-test --create tests/shop.atc --template ecommerce
+agentic-test --create tests/api.atc --template api
 
 # Overwrite existing file
-agentic-test --create tests/test.atf --overwrite
+agentic-test --create tests/test.atc --overwrite
 ```
 
 **Available Templates:**
@@ -186,39 +229,39 @@ Each template includes:
 
 ## Usage
 
-### Run entire ATF file
+### Run entire ATC file
 
 ```bash
-agentic-test tests/checkout.atf
+agentic-test tests/checkout.atc
 ```
 
 ### Run specific scenario
 
 ```bash
-agentic-test tests/checkout.atf --scenario "Guest Checkout"
+agentic-test tests/checkout.atc --scenario "Guest Checkout"
 ```
 
 ### Run scenarios by tag
 
 ```bash
-agentic-test tests/checkout.atf --tag smoke
+agentic-test tests/checkout.atc --tag smoke
 ```
 
 ### Override configuration
 
 ```bash
-# Run in headless mode even if ATF says headless=false
-agentic-test tests/checkout.atf --headless
+# Run in headless mode even if ATC says headless=false
+agentic-test tests/checkout.atc --headless
 
 # Use different browser
-agentic-test tests/checkout.atf --browser firefox
+agentic-test tests/checkout.atc --browser firefox
 ```
 
 ## Best Practices
 
 ### Organization
 
-- **One file per feature**: Create separate ATF files for login, search, checkout, etc.
+- **One file per feature**: Create separate ATC files for login, search, checkout, etc.
 - **Meaningful names**: Use descriptive scenario names
 - **Tag strategically**: Use tags like `smoke`, `regression`, `critical` for test organization
 
@@ -246,14 +289,15 @@ Common tag conventions:
 
 ## Validation
 
-The ATF parser validates:
+The ATC parser validates:
 - ✅ At least one scenario exists
 - ✅ Each scenario has test steps
+- ✅ Each scenario has `@id` and `@reference`
 - ⚠️ Warns about empty scenarios
 
 ## Comments
 
-ATF format doesn't support comments yet. Use the Description field for documentation.
+ATC format doesn't support comments yet. Use the Description field for documentation.
 
 ## Future Enhancements
 
@@ -263,4 +307,4 @@ Planned features:
 - Test dependencies
 - Setup/teardown blocks
 - Comments support
-- Import/include other ATF files
+- Import/include other ATC files

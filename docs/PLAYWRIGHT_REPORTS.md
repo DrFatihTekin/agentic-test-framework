@@ -108,7 +108,7 @@ agentic-test "test description" --no-step-screenshots
 - See when elements appeared/disappeared
 - Identify race conditions
 
-## ATF File Configuration
+## ATC File Configuration
 
 ```yaml
 @config
@@ -172,13 +172,13 @@ test-results/
 ### For Development
 ```bash
 # Full visibility - all reports + visible browser
-agentic-test test.atf --no-headless
+agentic-test test.atc --no-headless
 ```
 
 ### For CI/CD
 ```bash
 # Fast execution - headless with reports
-agentic-test test.atf --headless
+agentic-test test.atc --headless
 ```
 
 ### For Quick Tests
@@ -190,7 +190,7 @@ agentic-test "quick test" --no-report --no-trace --headless
 ### For Debugging Failed Tests
 ```bash
 # Generate trace, then view it
-agentic-test test.atf
+agentic-test test.atc
 playwright show-trace test-results/traces/trace_*.zip
 ```
 
@@ -212,7 +212,7 @@ Trace files are fully self-contained and can be shared:
 To reduce artifact size:
 ```bash
 # Disable features you don't need
-agentic-test test.atf --no-trace --no-step-screenshots
+agentic-test test.atc --no-trace --no-step-screenshots
 ```
 
 ## Troubleshooting

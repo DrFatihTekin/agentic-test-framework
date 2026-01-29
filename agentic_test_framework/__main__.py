@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 from dotenv import load_dotenv
 from agentic_test_framework import AgenticTestRunner
-from agentic_test_framework.parser import ATFParser, ATFTemplateGenerator
+from agentic_test_framework.parser import ATCParser, ATCTemplateGenerator
 from agentic_test_framework.config import EnvSetup
 
 
@@ -32,24 +32,24 @@ Examples:
   # Run natural language test
   agentic-test "Go to google.com and search for playwright"
   
-  # Create ATF template file
-  agentic-test --create tests/my_test.atf
-  agentic-test --create tests/login.atf --template login
+    # Create ATC template file
+    agentic-test --create tests/my_test.atc
+    agentic-test --create tests/login.atc --template login
   
   # Setup environment
   agentic-test --setup
   
-  # Run ATF file
-  agentic-test tests/login.atf
-  agentic-test tests/suite.atf --scenario "Successful login"
-  agentic-test tests/suite.atf --tag smoke
+    # Run ATC file
+    agentic-test tests/login.atc
+    agentic-test tests/suite.atc --scenario "Successful login"
+    agentic-test tests/suite.atc --tag smoke
         """
     )
     parser.add_argument(
         "test",
         type=str,
         nargs='?',
-        help="Natural language test description or path to .atf file"
+        help="Natural language test description or path to .atc file"
     )
     parser.add_argument(
         "--setup",
@@ -59,13 +59,13 @@ Examples:
     parser.add_argument(
         "--create",
         metavar="FILE",
-        help="Create a new ATF template file at the specified path"
+        help="Create a new ATC template file at the specified path"
     )
     parser.add_argument(
         "--template",
         choices=["basic", "login", "ecommerce", "api"],
         default="basic",
-        help="Template type when creating ATF file (default: basic)"
+        help="Template type when creating ATC file (default: basic)"
     )
     parser.add_argument(
         "--overwrite",
@@ -101,11 +101,11 @@ Examples:
     )
     parser.add_argument(
         "--scenario",
-        help="Run specific scenario from ATF file (by name)"
+        help="Run specific scenario from ATC file (by name)"
     )
     parser.add_argument(
         "--tag",
-        help="Run scenarios with specific tag from ATF file"
+        help="Run scenarios with specific tag from ATC file"
     )
     
     args = parser.parse_args()
@@ -138,15 +138,18 @@ Examples:
     # Handle --create flag
     if args.create:
         try:
-            created = ATFTemplateGenerator.create_file(
+            created = ATCTemplateGenerator.create_file(
                 output_path=args.create,
                 template_type=args.template,
                 overwrite=args.overwrite
             )
             
             if created:
-                output_path = args.create if args.create.endswith('.atf') else f"{args.create}.atf"
-                print(f"✅ Created ATF template file: {output_path}")
+                if args.create.endswith('.atc'):
+                    output_path = args.create
+                else:
+                    output_path = f"{args.create}.atc"
+                print(f"✅ Created ATC template file: {output_path}")
                 print(f"   Template type: {args.template}")
                 print(f"\n📝 Edit the file to customize your test scenarios, then run:")
                 print(f"   agentic-test {output_path}")
@@ -174,19 +177,19 @@ Examples:
         sys.exit(1)
     
     try:
-        # Check if input is an ATF file
+        # Check if input is an ATC file
         test_input = args.test
-        is_atf_file = test_input.endswith('.atf') and Path(test_input).exists()
+        is_atc_file = test_input.endswith('.atc') and Path(test_input).exists()
         
-        if is_atf_file:
-            # Parse ATF file
-            atf_parser = ATFParser()
-            test_suite = atf_parser.parse_file(test_input)
+        if is_atc_file:
+            # Parse ATC file
+            atc_parser = ATCParser()
+            test_suite = atc_parser.parse_file(test_input)
             
             # Validate
-            issues = atf_parser.validate(test_suite)
+            issues = atc_parser.validate(test_suite)
             if issues:
-                print("⚠️  ATF Validation Warnings:")
+                print("⚠️  ATC Validation Warnings:")
                 for issue in issues:
                     print(f"  - {issue}")
                 print()
@@ -207,7 +210,7 @@ Examples:
                     print(f"❌ No scenarios found with tag: {args.tag}")
                     sys.exit(1)
             
-            # Use config from ATF file if not overridden by CLI
+            # Use config from ATC file if not overridden by CLI
             browser = args.browser if args.browser != "chromium" else test_suite.config.get("browser", "chromium")
             headless = args.headless if args.headless else test_suite.config.get("headless", False)
             

@@ -1,24 +1,24 @@
-# Creating ATF Test Files
+# Creating ATC Test Files
 
 ## Quick Reference
 
-### Create New ATF File
+### Create New ATC File
 
 ```bash
 # Basic template
-agentic-test --create tests/my_test.atf
+agentic-test --create tests/my_test.atc
 
 # Login template
-agentic-test --create tests/login.atf --template login
+agentic-test --create tests/login.atc --template login
 
 # E-commerce template
-agentic-test --create tests/shop.atf --template ecommerce
+agentic-test --create tests/shop.atc --template ecommerce
 
 # API testing template
-agentic-test --create tests/api.atf --template api
+agentic-test --create tests/api.atc --template api
 
 # Overwrite existing file
-agentic-test --create tests/test.atf --overwrite
+agentic-test --create tests/test.atc --overwrite
 ```
 
 ## Available Templates
@@ -35,7 +35,7 @@ agentic-test --create tests/test.atf --overwrite
 
 **Example usage:**
 ```bash
-agentic-test --create tests/simple.atf
+agentic-test --create tests/simple.atc
 ```
 
 ### 2. Login Template (`--template login`)
@@ -55,9 +55,9 @@ agentic-test --create tests/simple.atf
 
 **Example usage:**
 ```bash
-agentic-test --create tests/auth.atf --template login
+agentic-test --create tests/auth.atc --template login
 # Edit file to replace YOUR_APP_URL with actual URL
-# Run: agentic-test tests/auth.atf --tag smoke
+# Run: agentic-test tests/auth.atc --tag smoke
 ```
 
 ### 3. E-commerce Template (`--template ecommerce`)
@@ -76,7 +76,7 @@ agentic-test --create tests/auth.atf --template login
 
 **Example usage:**
 ```bash
-agentic-test --create tests/shopping.atf --template ecommerce
+agentic-test --create tests/shopping.atc --template ecommerce
 ```
 
 ### 4. API Template (`--template api`)
@@ -96,18 +96,18 @@ agentic-test --create tests/shopping.atf --template ecommerce
 
 **Example usage:**
 ```bash
-agentic-test --create tests/integration.atf --template api
+agentic-test --create tests/integration.atc --template api
 ```
 
 ## Workflow
 
 ### 1. Create Template
 ```bash
-agentic-test --create tests/login.atf --template login
+agentic-test --create tests/login.atc --template login
 ```
 
 ### 2. Edit File
-Open `tests/login.atf` and customize:
+Open `tests/login.atc` and customize:
 - Replace placeholder URLs (`YOUR_APP_URL`)
 - Update test data (usernames, passwords)
 - Add/remove scenarios
@@ -116,16 +116,16 @@ Open `tests/login.atf` and customize:
 ### 3. Run Tests
 ```bash
 # Run all scenarios
-agentic-test tests/login.atf
+agentic-test tests/login.atc
 
 # Run specific scenario
-agentic-test tests/login.atf --scenario "Successful Login"
+agentic-test tests/login.atc --scenario "Successful Login"
 
 # Run by tag
-agentic-test tests/login.atf --tag smoke
+agentic-test tests/login.atc --tag smoke
 
 # Run in headless mode
-agentic-test tests/login.atf --headless
+agentic-test tests/login.atc --headless
 ```
 
 ## Common Patterns
@@ -135,51 +135,51 @@ agentic-test tests/login.atf --headless
 ```
 tests/
 ├── smoke/
-│   ├── critical.atf          # Basic template
-│   └── login.atf              # Login template
+│   ├── critical.atc          # Basic template
+│   └── login.atc              # Login template
 ├── regression/
-│   ├── checkout.atf           # E-commerce template
-│   └── profile.atf            # API template
+│   ├── checkout.atc           # E-commerce template
+│   └── profile.atc            # API template
 └── integration/
-    └── api.atf                # API template
+    └── api.atc                # API template
 ```
 
 ### Running Organized Tests
 
 ```bash
 # All smoke tests
-for f in tests/smoke/*.atf; do agentic-test $f --tag smoke; done
+for f in tests/smoke/*.atc; do agentic-test $f --tag smoke; done
 
 # All regression tests
-for f in tests/regression/*.atf; do agentic-test $f; done
+for f in tests/regression/*.atc; do agentic-test $f; done
 ```
 
 ## Tips
 
 1. **Start with templates** - Faster than writing from scratch
 2. **Replace placeholders** - Always customize YOUR_APP_URL and test data
-3. **Use meaningful names** - Name files by feature (login.atf, checkout.atf)
+3. **Use meaningful names** - Name files by feature (login.atc, checkout.atc)
 4. **Tag strategically** - Use `@tag smoke` for critical tests
-5. **Version control** - Commit ATF files to git
+5. **Version control** - Commit ATC files to git
 6. **Don't overwrite accidentally** - Files are protected unless you use `--overwrite`
 
 ## Examples
 
 ### Create and run login test
 ```bash
-agentic-test --create tests/login.atf --template login
-# Edit tests/login.atf (replace YOUR_APP_URL)
-agentic-test tests/login.atf --tag smoke
+agentic-test --create tests/login.atc --template login
+# Edit tests/login.atc (replace YOUR_APP_URL)
+agentic-test tests/login.atc --tag smoke
 ```
 
 ### Create suite for new feature
 ```bash
-agentic-test --create tests/new_feature.atf
+agentic-test --create tests/new_feature.atc
 # Edit and add scenarios
-agentic-test tests/new_feature.atf
+agentic-test tests/new_feature.atc
 ```
 
 ### Replace existing test
 ```bash
-agentic-test --create tests/old_test.atf --template ecommerce --overwrite
+agentic-test --create tests/old_test.atc --template ecommerce --overwrite
 ```

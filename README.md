@@ -22,8 +22,8 @@ cp .env.example .env
 # Run an example test
 python -m agentic_test_framework "Go to example.com and take a screenshot"
 
-# Or run from an ATF file
-agentic-test examples/login.atf
+# Or run from an ATC file
+agentic-test examples/login.atc
 ```
 
 ## Features
@@ -37,7 +37,7 @@ agentic-test examples/login.atf
 - 🎥 **Video Recording**: Automatic video capture of test execution
 - ✅ **Assertions**: Verify conditions and extract data
 - 🔄 **Smart Retries**: Handles flaky elements automatically
-- 📝 **ATF Format**: Structured test files with YAML-like syntax
+- 📝 **ATC Format**: Structured test files with YAML-like syntax
 
 ## Example Tests
 
@@ -53,11 +53,11 @@ agentic-test "Navigate to github.com, click Sign in, type 'testuser' in username
 agentic-test "Go to example.com, verify the page title contains 'Example', take screenshot"
 ```
 
-### ATF File Format
+### ATC File Format
 
-Create structured test files with `.atf` extension:
+Create structured test files with `.atc` extension:
 
-```atf
+```atc
 # Login Test Suite
 
 @config browser=chromium
@@ -75,16 +75,16 @@ Verify page contains 'Welcome'
 Take a screenshot
 ```
 
-**Quick Start: Generate ATF Templates**
+**Quick Start: Generate ATC Templates**
 
 ```bash
 # Create basic template
-agentic-test --create tests/my_test.atf
+agentic-test --create tests/my_test.atc
 
 # Create from predefined templates
-agentic-test --create tests/login.atf --template login
-agentic-test --create tests/shop.atf --template ecommerce
-agentic-test --create tests/api.atf --template api
+agentic-test --create tests/login.atc --template login
+agentic-test --create tests/shop.atc --template ecommerce
+agentic-test --create tests/api.atc --template api
 ```
 
 Available templates:
@@ -93,19 +93,19 @@ Available templates:
 - **ecommerce** - Shopping and checkout flows
 - **api** - API/integration tests
 
-Run ATF files:
+Run ATC files:
 ```bash
 # Run all scenarios
-agentic-test tests/login.atf
+agentic-test tests/login.atc
 
 # Run specific scenario
-agentic-test tests/login.atf --scenario "Successful Login"
+agentic-test tests/login.atc --scenario "Successful Login"
 
 # Run by tag
-agentic-test tests/login.atf --tag smoke
+agentic-test tests/login.atc --tag smoke
 ```
 
-See [docs/ATF_FORMAT.md](docs/ATF_FORMAT.md) for complete format specification.
+See [docs/ATC_FORMAT.md](docs/ATC_FORMAT.md) for complete format specification.
 
 ## Architecture
 
