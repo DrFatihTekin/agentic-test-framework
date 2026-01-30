@@ -9,8 +9,8 @@ An AI-powered browser testing framework that accepts natural language test descr
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install the package
+pip install agentic-test-framework
 
 # Install Playwright browsers
 playwright install

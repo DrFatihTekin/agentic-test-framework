@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
-    {name = "Agentic Test Framework Contributors"}
+    {name = "Dr. Fatih Tekin", email = "fatih.tekin.de@gmail.com"}
 ]
 keywords = ["testing", "automation", "ai", "playwright", "openai", "browser-testing"]
 classifiers = [
@@ -40,9 +40,9 @@ dev = [
 agentic-test = "agentic_test_framework.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/agentic-test-framework"
-Documentation = "https://github.com/yourusername/agentic-test-framework/blob/main/README.md"
-Repository = "https://github.com/yourusername/agentic-test-framework"
+Homepage = "https://github.com/DrFatihTekin/agentic-test-framework/tree/master"
+Documentation = "https://github.com/DrFatihTekin/agentic-test-framework/tree/master/README.md"
+Repository = "https://github.com/DrFatihTekin/agentic-test-framework"
 
 [tool.setuptools.packages.find]
 where = ["."]
