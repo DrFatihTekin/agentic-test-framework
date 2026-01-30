@@ -21,9 +21,6 @@ cp .env.example .env
 
 # Run an example test
 python -m agentic_test_framework "Go to example.com and take a screenshot"
-
-# Or run from an ATC file
-agentic-test examples/login.atc
 ```
 
 ## Features
